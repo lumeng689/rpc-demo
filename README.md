@@ -98,10 +98,26 @@ http://localhost:8052/rest/n/zhangsan
 访问 https://github.com/grpc/grpc-web/releases 下载 protoc-gen-grpc-web-1.0.4-windows-x86_64.exe(最新版本即可)，将其放到
 windows的执行路径里，更改名称为protoc-gen-grpc-web.exe
 
+## mac
+
+从上面的地址下载 protoc-gen-grpc-web-1.0.4-darwin-x86_64，然后执行：
+```bash
+sudo mv ~/Downloads/protoc-gen-grpc-web-1.0.4-darwin-x86_64 /usr/local/bin/protoc-gen-grpc-web
+chmod +x /usr/local/bin/protoc-gen-grpc-web
+```
+
+然后执行命令进行生成即可
 ```
 protoc -I=$DIR echo.proto \
 --js_out=import_style=commonjs:$OUT_DIR \
 --grpc-web_out=import_style=commonjs,mode=grpcwebtext:$OUT_DIR
+```
+
+生成Typescript例子
+```bash
+protoc -I=./ echo.proto \
+--js_out=import_style=commonjs:./ \
+--grpc-web_out=import_style=typescript,mode=grpcwebtext:./
 ```
 
 $DIR 替换为 echo.proto所在目录
@@ -151,9 +167,17 @@ docker inspect xxxxx
 
 ```
 
-# 7 执行grpc问题解决
+# 7 执行grpc/grpc-web项目的demo时问题解决
 
-修改 grpc-web/net/grpc/gateway/examples/echo/envoy.yaml文件
+## 下载
+```bash
+https://github.com/grpc/grpc-web
+```
+
+## 启动
+切换到grpc-web目录下
+
+首先 修改 grpc-web/net/grpc/gateway/examples/echo/envoy.yaml文件
 删除34行的enabled: true，替换为以下内容：
 ```yaml
 filter_enabled: 
@@ -165,3 +189,22 @@ filter_enabled:
 
 ![如下](/static/pic1.png)
 
+```bash
+# 执行目录要在grpc-web根目录
+
+#  启动后台服务
+docker build -t grpcweb/node-server -f net/grpc/gateway/docker/node_server/Dockerfile .
+docker run -d -p 9090:9090 --name node-server grpcweb/node-server
+
+# 启动Envoy代理服务
+docker build -t grpcweb/envoy -f net/grpc/gateway/docker/envoy/Dockerfile .
+docker run -d -p 8080:8080 --link node-server:node-server grpcweb/envoy
+
+# 启动前端服务
+docker build -t grpcweb/commonjs-client -f net/grpc/gateway/docker/commonjs_client/Dockerfile .
+docker run -d -p 8081:8081 grpcweb/commonjs-client
+
+```
+
+访问本地浏览器 [http://localhost:8081/echotest.html](http://localhost:8081/echotest.html)
+windows 上如果使用 Docker Toolbox，则将localhost改成 192.168.99.100 这个地址是执行  docker-machine ip default取得的。
