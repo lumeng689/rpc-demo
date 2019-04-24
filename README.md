@@ -151,5 +151,17 @@ docker inspect xxxxx
 
 ```
 
+# 7 执行grpc问题解决
 
+修改 grpc-web/net/grpc/gateway/examples/echo/envoy.yaml文件
+删除34行的enabled: true，替换为以下内容：
+```yaml
+filter_enabled: 
+    default_value:
+        numerator: 100
+        denominator: 0
+    runtime_key: "1"
+```
+
+![如下](/static/pic1.png)
 
