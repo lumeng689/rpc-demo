@@ -55,7 +55,23 @@ dep prune -v
 dep ensure -add github.com/gin-gonic/gin
 ```
 
-# 3 protoc-gen-go 用法
+# 3 protoc 安装
+
+访问[https://github.com/protocolbuffers/protobuf/releases](https://github.com/protocolbuffers/protobuf/releases)
+以当前版本【3.7.1】为例
+
+## windows
+下载 protoc-3.7.1-win64.zip，解压，将bin下的 protoc.exe 文件丢到一个可执行路径里就行了。
+
+## mac
+下载 protoc-3.7.1-osx-x86_64.zip，然后解压文件
+```bash
+cd ~/Downloads/protoc-3.7.1-osx-x86_64
+cp -R ./bin /usr/local/
+cp -R ./includes /usr/local
+```
+
+# 4 protoc-gen-go 用法
 
 安装
 ```bash
@@ -77,7 +93,7 @@ protoc --go_out=. *.proto
 protoc  helloworld.proto --go_out=plugins=grpc:./
 ```
 
-# 4 执行demo
+# 5 执行demo
 
 运行grpc 服务
 ```bash
@@ -92,7 +108,7 @@ go run gin/main.go
 浏览器中访问
 http://localhost:8052/rest/n/zhangsan
 
-# 5 protoc-gen-grpc-web 安装
+# 6 protoc-gen-grpc-web 安装
 
 ## windows
 访问 https://github.com/grpc/grpc-web/releases 下载 protoc-gen-grpc-web-1.0.4-windows-x86_64.exe(最新版本即可)，将其放到
@@ -125,7 +141,7 @@ $OUT_DIR 代表输出目录， 注意， 第二行和第三行都有
 
 输出为typescript的话，更改第三行代码的import_style 为 import_style=commonjs+dts或者 import_style=typescript
 
-# 6 Docker 命令
+# 7 Docker 命令
 
 ```bash
 # 查看宿主机IP Docker Toolbox 上访问，不能使用localhost，要用这个地址
@@ -167,7 +183,7 @@ docker inspect xxxxx
 
 ```
 
-# 7 执行grpc/grpc-web项目的demo时问题解决
+# 8 执行grpc/grpc-web项目的demo时问题解决
 
 ## 下载
 ```bash
