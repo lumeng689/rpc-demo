@@ -192,6 +192,9 @@ filter_enabled:
 ```bash
 # 执行目录要在grpc-web根目录
 
+# 构建基础服务
+docker build -t grpcweb/common -f net/grpc/gateway/docker/common/Dockerfile .
+
 #  启动后台服务
 docker build -t grpcweb/node-server -f net/grpc/gateway/docker/node_server/Dockerfile .
 docker run -d -p 9090:9090 --name node-server grpcweb/node-server
