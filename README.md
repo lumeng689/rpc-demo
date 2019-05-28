@@ -131,7 +131,7 @@ protoc -I=$DIR echo.proto \
 
 生成Typescript例子
 ```bash
-protoc -I=./ echo.proto \
+protoc -I=./ testAny.proto \
 --js_out=import_style=commonjs:./ \
 --grpc-web_out=import_style=typescript,mode=grpcwebtext:./
 ```
